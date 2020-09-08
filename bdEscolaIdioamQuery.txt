@@ -1,0 +1,105 @@
+
+
+
+/*
+	1 - Criar uma consulta que retorne o nome e o preço dos cursos que custem abaixo do valor médio
+*/
+//A
+select nomeCurso ,valorCurso from tbCurso
+where valorCurso <(select avg(valorCurso) from tbCurso)
+
+select * from tbCurso
+
+
+
+/*
+	2 - Criar uma consulta que retorne o nome e o rg do aluno mais novo
+*/
+//b
+select * from tbAluno
+
+select nomeAluno , rgAluno from tbAluno
+where dataNascimento =(select max(dataNascimento)from tbAluno)
+
+
+
+/*
+	3 - Criar uma consulta que retorne o nome do aluno mais velho
+*/
+//c
+select nomeAluno from tbAluno
+where dataNascimento = (select min(dataNascimento) from tbAluno)
+
+
+
+/*
+	4 - Criar uma consulta que retorne o nome e o valor do curso mais caro
+*/
+//d
+select * from tbCurso
+
+select nomeCurso , valorCurso from tbCurso
+where valorCurso =(select MAX(valorCurso) from tbCurso)
+
+
+
+/*
+	5 - Criar uma consulta que retorne o nome do aluno e o nome do curso, 
+		do aluno que fez a última matrícula
+*/
+//e
+select * from tbAluno
+select * from tbMatricula
+select * from tbCurso
+select * from tbTurma
+
+select nomeAluno , nomeCurso from tbAluno
+inner join tbMatricula on tbAluno.codAluno = tbMatricula.codAluno
+inner join tbTurma on tbMatricula.codTurma  = tbTurma.codCurso
+inner join tbCurso on tbTurma.codCurso = tbCurso.codCurso
+where dataMatricula =(select max(dataMatricula) from tbMatricula)
+
+
+
+/*
+	6 - Criar uma consulta que retorne o nome do primeiro aluno a ser matriculado na escola de Idiomas
+*/
+//f
+
+select * from tbMatricula
+select * from tbAluno
+
+select nomeAluno from tbAluno
+inner join tbMatricula on tbMatricula.codAluno = tbAluno.codAluno
+where dataMatricula = (select min(dataMatricula) from tbMatricula)
+
+
+
+
+
+/*
+	7 - Criar uma consulta que retorne o nome, rg e data de nascimento de todos 
+		os alunos que estejam matriculados no curso de inglês
+*/
+
+//g
+select * from tbMatricula
+select * from tbAluno
+select * from tbCurso
+select * from tbTurma
+
+select nomeAluno , rgAluno , dataNascimento from tbAluno
+where codAluno in(select codAluno from tbMatricula
+where codTurma in(select codTurma from tbMatricula
+where codTurma = 1))
+
+
+
+
+
+
+
+
+
+
+
