@@ -1,0 +1,73 @@
+create database bdRecursosHumanos 
+use bdRecursosHumanos
+
+create table tbDepartamento(
+idDepartamento int primary key 
+,nomeDepartamento varchar(30) not null
+)
+
+create table tbFuncionario(
+idFuncionario int primary key 
+,nomeFuncionario varchar(50) not null
+,cpfFuncionario bigint not null
+,sexoFuncionario char not null
+,dataNascimentoFuncionario datetime not null
+,salarioFuncionario decimal(10,2) not null
+,idDepartamento int foreign key references tbDepartamento(idDepartamento)
+)
+
+
+create table tbDependente(
+idDependente int primary key
+,nomeDependente varchar(30) not null
+,dataNascimentoDependente datetime not null
+,sexoDependente char not null
+,idFuncionario int foreign key references tbFuncionario(idFuncionario)
+)
+
+insert into tbDepartamento(idDepartamento,nomeDepartamento)
+values ('1','Compras')
+		,('2','Vendas')
+		,('3','Ti')
+		,('4','Marketing')
+
+		select * from tbDepartamento
+
+insert into tbFuncionario(idFuncionario,nomeFuncionario,cpfFuncionario,sexoFuncionario,dataNascimentoFuncionario,salarioFuncionario,idDepartamento)
+				values('1','Maria Luisa Moura','12345678900','f','1900-02-10 00:00:00','3400.00','1')
+				,('2','Mariana Goulart','45678909299','f','1991-04-08 00:00:00','2800.00','1')
+				,('3','Pedro Paulo vlidgal','64587222388','m','1994-05-07 00:00:00','5400.00','2')
+				,('4','Carlos Calixto','83738232233','m','1965-03-03 00:00:00','8900.00','2')
+				,('5','Viviane Martins','77832233399','f','1976-06-06 00:00:00','4300.00','3')
+				,('6','Analice Mendes','83703383493','f','1981-09-09 00:00:00','6800.00','3')
+				,('7','Patricia Ishikawa','43356609300','f','1978-05-05 00:00:00','4900.00','4')
+
+insert into tbDependente(idDependente,nomeDependente,dataNascimentoDependente,sexoDependente,idFuncionario)
+			values('1','Lucas Moura','10/01/2015','m','1')
+			,('2','Carlos Calixto jr','08/06/2000','m','4')
+			,('3','Michele Costa Calixto','09/09/2003','f','4')
+			,('4','Silvana Costa Calixto','04/04/2006','f','4')
+			,('5','Arthur Mendes Silva','07/07/2010','m','6')
+
+
+//1
+	update tbFuncionario 
+	set nomeFuncionario = 'Maria Luiza dos Santos'
+	where idFuncionario = '1'
+
+	select * from tbfuncionario
+	select * from tbDependente
+	select * from tbDepartamento
+
+	//2
+	update tbFuncionario
+	set salarioFuncionario= salarioFuncionario +salarioFuncionario /100 * 12
+	where salarioFuncionario< 5900.00
+
+	//3
+
+	
+	delete from tbDependente where nomeDependente = 'Carlos Calixto jr';
+
+
+
