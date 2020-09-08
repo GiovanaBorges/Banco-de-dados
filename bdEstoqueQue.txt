@@ -1,0 +1,53 @@
+
+
+/*
+	1 - Criar uma consulta que retorne o código do produto , o nome do produto e o nome do fabricante somente daqueles produtos
+		que custam igual ao valor mais alto.
+*/
+//1
+select codProduto as 'Código-Produto',descricaoProduto as 'Nome Produto' , nomeFabricante  as 'Nome Fabricante'
+from tbProduto inner join tbFabricante on tbProduto.codFabricante = tbFabricante.codFabricante
+where valorProduto =(select max(valorProduto) from tbProduto)
+
+
+
+/*
+	2 - Criar uma consulta que retorne o nome do produto e o nome do fabricante e o valor somente dos produtos que custem acima
+		do valor médio dos produtos em estoque .
+*/
+//2
+select descricaoProduto as 'nomeProduto',nomeFabricante ,valorProduto 
+from tbProduto inner join tbFabricante on tbProduto.codFabricante = tbFabricante.codFabricante
+where valorProduto >=(select avg(valorProduto) from tbProduto)
+and tbFabricante.codFabricante  in(select codFabricante from tbProduto)
+
+
+
+/* 
+	3 - Criar uma consulta que retorne o nome dos clientes que tiveram vendas com valor acima do valor médio das vendas
+*/
+//3
+select nomeCliente as 'cliente com venda acima da média ' from tbCliente
+inner join tbVenda on tbCliente.codCliente = tbVenda.codVenda
+where valorTotalVenda >=(select avg(ValorTotalVenda) from tbVenda)
+
+
+/*
+	4 - Criar uma consulta que retorne o nome e o preço dos produtos mais caros
+*/
+
+//4 
+select descricaoProduto as 'Produtos mais caros',valorProduto as 'Valor Do Produto' from tbProduto
+where valorProduto <=(select max(valorProduto) from tbProduto)
+and valorProduto >(select min(valorProduto) from tbProduto)
+
+
+
+/*
+	5 - Criar uma consulta que retorne o nome e o preço do produto mais barato (obs : o produto e o valor são os mesmo então acho que tá certo ;( )
+*/
+//5 
+select descricaoProduto , valorProduto from tbProduto 
+where valorProduto in(select min(valorProduto) from tbProduto)   
+
+
