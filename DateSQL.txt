@@ -1,0 +1,51 @@
+
+/*
+	1 - contagem de Dias em atrasos
+*/
+//1
+select datediff(day,'03/04/2020','05/06/2020') as 'Dias de Atrasos'
+
+/*
+	2 - Calculo de idade de um cliente
+*/
+
+//2
+select datediff(year,'14/07/1981','24/06/2020') as 'Idade Cliente'
+
+/*
+	3 - Vencimento de uma fatura
+*/
+//3
+select dateadd(month,1,'05/06/2020') as 'vencimento da próxima fatura'
+
+
+/*
+	4 - Previsão da próxima dose de uma vacina
+*/
+//4
+select DATEADD(day,120,'05/06/2020') as 'próxima dose da vacina'
+
+
+/*
+	5 - Previsão da última prestação
+*/
+//5
+select dateadd(month,72,'05/06/2018') as 'última prestação'
+
+
+
+/*
+	6 - Previsão da próxima passagem do cometa halley
+*/
+/6
+select DATEADD(year,76,'09/02/1986')as 'próxima passagem do cometa halley'
+
+
+
+/*
+	7 - contagem de dias , meses e anos vividos.
+*/
+//7
+select datediff(DAY,'21/06/2003','05/06/2020') as 'dias vividos'
+select DATEDIFF(MONTH,'21/06/2003','05/06/2020') as 'meses vividos'
+select DATEDIFF(YEAR,'21/06/2003','05/06/2020') as 'anos vividos'
