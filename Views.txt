@@ -1,0 +1,62 @@
+use bdEscolaIdiomas
+
+
+/*
+	Crie uma visão “Preço_Baixo” que exiba o código, nome do curso, carga horária e o 
+	valor do curso de todos os cursos que tenha preço inferior ao preço médio.
+*/
+	//1
+	create view preço_Baixo as
+	select idCurso as'codigo curso',nomeCurso,cargaHorariaCurso ,valorCurso from tbCurso
+	where valorCurso <(select avg(valorCurso) from tbCurso)
+
+
+	//2				--Usando a visão “Preço_Baixo”, mostre todos os cursos ordenados por carga horária.
+	select * from preço_Baixo
+	order by cargaHorariaCurso 
+
+	
+
+
+//3			-Crie uma visão “Alunos_Turma” que exiba o curso e a quantidade de alunos por turma.
+
+
+	create view Alunos_Turma  as
+	select nomeCurso , count(tbAluno.idAluno)  as 'Alunos_por_Turma' from tbAluno
+	inner join  tbMatricula on tbAluno.idAluno = tbMatricula.idAluno 
+		inner join tbTurma on tbMatricula.idTurma = tbTurma.idTurma
+			inner join tbCurso on tbTurma.idCurso = tbCurso.idCurso
+		group by nomeCurso
+
+select * from Alunos_Turma
+
+
+
+
+//4
+
+--Usando a visão “Alunos_Turma” exiba a turma com maior número de alunos.
+alter view Alunos_Turma as 
+select nomeTurma ,count(tbMatricula.idAluno) as 'Quantidade Aluno' from tbAluno
+inner join tbMatricula on tbAluno.idAluno = tbMatricula.idAluno
+	inner join tbTurma on tbMatricula.idTurma = tbTurma.idTurma
+		group by nomeTurma
+				
+	select nomeTurma from Alunos_Turma
+	where [Quantidade Aluno] =(select max([Quantidade Aluno]) from Alunos_Turma)
+
+
+
+
+
+//5			--Crie uma visão “Turma_Curso que exiba o curso e a quantidade de turmas.
+create view Turma_Curso as
+select nomeCurso ,count(tbTurma.idCurso) as 'Quantidade de Turmas por Curso' from tbTurma
+	inner join tbCurso on tbTurma.idCurso = tbCurso.idCurso
+	group by nomeCurso
+
+
+
+//6				-- Usando a visão "Turma_Curso" exiba o curso com menor número de turmas.
+select * from Turma_Curso 
+where [Quantidade de Turmas por Curso] =(select min([Quantidade de Turmas por Curso]) from Turma_Curso)
