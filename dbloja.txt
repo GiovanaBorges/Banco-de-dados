@@ -60,7 +60,7 @@ iditensVenda int primary key identity(1,1)
 )
 
 
-
+  	--Criar um trigger que,ao ser feita uma venda(InsertnatabelatbItensVenda) ,todos os produtos vendidos tenham sua quantidade atualizada na tabela 		tbProduto. Exemplo,se foi feita uma venda de 5 unidades do produto código01,  										 	na tabela tbProduto a quantidade desse produto será a quantidade atual–5; -- 
 //1 
 
 create trigger tgVenda on itensVenda 
@@ -78,7 +78,7 @@ end
 go
 
 insert into tbProduto(descricaoProduto,valorProduto,quantidadeProduto)
-values (' chocolate nestl�','25.45','45')
+values (' chocolate nestlé','25.45','45')
 
 insert into tbProduto(descricaoProduto,valorProduto,quantidadeProduto)
 values ('Smartphone A10 Samsung','120.87','30')
@@ -97,7 +97,10 @@ select * from tbProduto
 
 
 
+
 //2
+-- Criar uma trigger que, quando for inserida uma nova entrada de produtos na tbEntradaProduto,a quantidade desse produto seja atualizada e aumentada na tabela tbProduto;  --
+
 
 create trigger tgAtualizaProduto on tbProduto
 for insert 
@@ -122,6 +125,8 @@ select * from tbentradaProduto
 
 
 //3
+
+--Criar uma trigger que, quando for feita uma venda de um determinado produto, seja feito um Insert na tbSaidaProduto. --
 
 drop trigger tgVendaSaida
 
