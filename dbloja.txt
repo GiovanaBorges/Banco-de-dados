@@ -1,0 +1,160 @@
+create database dbLoja 
+use dbLoja
+
+create table tbFornecedor(
+idFornecedor int primary key identity(1,1)
+,nomeFornecedor varchar(35) not null
+,contatoFornecedor varchar(35) not null
+)
+
+create table tbFabricante (
+idFabricante int primary key identity(1,1)
+,nomeFabricante varchar(35) not null
+)
+
+create table tbProduto(
+idProduto int primary key identity(1,1)
+,descricaoProduto varchar(65) not null
+,valorProduto decimal(10,2) not null
+,quantidadeProduto int not null
+,idFabricante int foreign key references tbFabricante(idFabricante)
+,idFornecedor int foreign key references tbFornecedor(idFornecedor)
+)
+
+create table tbsaidaProduto(
+idsaidaProduto int primary key identity(1,1)
+,datasaidaProduto date not null
+,quantidadesaidaProduto int not null
+,idProduto int foreign key references tbProduto(idProduto)
+)
+
+create table tbentradaProduto(
+identradaProduto int primary key identity(1,1)
+,dataentradaProduto date not null
+,quantidadeEntradaProduto int not null
+,idProduto int foreign key references tbProduto(idProduto)
+)
+
+create table tbCliente(
+idCliente int primary key identity(1,1)
+,nomeCliente varchar(35) not null
+,cpfCliente varchar(35) not null
+,emailCliente varchar(35) not null
+,sexoCliente char not null
+,datanascimentoCliente date not null
+)
+
+create table tbVenda (
+idVenda int primary key identity(1,1)
+,dataVenda date not null
+,valorTotalVenda decimal(10,2)
+,idCliente int foreign key references tbCliente(idCliente)
+)
+
+create table itensVenda(
+iditensVenda int primary key identity(1,1)
+,quantidadeitensVenda int not null
+,subtotalitensVenda decimal(10,2)
+,idVenda int foreign key references tbVenda(idVenda)
+,idProduto int foreign key references tbProduto(idProduto)
+)
+
+
+
+//1 
+
+create trigger tgVenda on itensVenda 
+for insert 
+as 
+begin
+declare @idProduto int ,@quantidadeProduto int , @idVenda int
+set @idProduto = ( select idProduto from inserted)
+set @idVenda = (select iditensVenda from inserted)
+set @quantidadeProduto = (select quantidadeitensVenda from itensVenda where iditensVenda = @idVenda)
+update tbProduto
+	set quantidadeProduto = quantidadeProduto - @quantidadeProduto
+	where idProduto = @idProduto
+end
+go
+
+insert into tbProduto(descricaoProduto,valorProduto,quantidadeProduto)
+values (' chocolate nestlé','25.45','45')
+
+insert into tbProduto(descricaoProduto,valorProduto,quantidadeProduto)
+values ('Smartphone A10 Samsung','120.87','30')
+
+insert into tbProduto(descricaoProduto,valorProduto,quantidadeProduto)
+values ('caixa de chocolate bis','890.87','720')
+
+
+insert into itensVenda(quantidadeitensVenda,subtotalitensVenda,idProduto)
+values('7','120.25','2')
+
+
+select * from itensVenda
+
+select * from tbProduto
+
+
+
+//2
+
+create trigger tgAtualizaProduto on tbProduto
+for insert 
+as
+begin
+declare  @idProduto int ,@quantidadeProduto int 
+	set @idProduto = (select idProduto from inserted)
+	set @quantidadeProduto = (select quantidadeProduto from inserted)
+update tbProduto
+	set quantidadeProduto = quantidadeProduto+ @quantidadeProduto
+	where idProduto = @idProduto
+end
+go
+
+insert into tbentradaProduto(dataentradaProduto,quantidadeEntradaProduto,idProduto)
+values(GETDATE(),'12','1')
+
+
+select * from itensVenda
+select * from tbProduto
+select * from tbentradaProduto
+
+
+//3
+
+drop trigger tgVendaSaida
+
+create trigger tgVendaSaida on tbsaidaProduto
+for insert 
+as
+begin
+declare @idProduto int , @quantidadeProduto int , @dataSaida date 
+	set  @idProduto = (select idProduto from inserted)
+	set @quantidadeProduto = (select quantidadesaidaProduto from inserted)
+	set @dataSaida = (select datasaidaProduto from inserted)
+	update tbProduto
+		set quantidadeProduto = quantidadeProduto - @quantidadeProduto 
+	where idProduto = @idProduto
+
+		begin
+		insert into tbsaidaProduto(quantidadesaidaProduto,datasaidaProduto,idProduto)
+			values(@quantidadeProduto,@dataSaida,@idProduto)
+			
+		end
+end
+
+select * from tbsaidaProduto
+select * from tbProduto
+
+
+insert into tbsaidaProduto(datasaidaProduto,quantidadesaidaProduto,idProduto)
+values(GETDATE(),'2','3')
+
+		
+
+
+
+
+
+
